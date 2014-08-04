@@ -21,7 +21,7 @@
 
             div .mainlogocontentdiv {
                 /*center the div*/
-                width: 50%;
+                width: 100%;
                 margin: 0px auto 0px auto;
             }
             div .mainlogocontentdiv h1 {
@@ -35,7 +35,7 @@
             }
             
             .ui-content {
-                padding: 14px !important;
+                padding: 0px !important;
             }
 
             .ui-listview {
@@ -71,7 +71,7 @@
         -->        
                 
         <!-- BEGIN PAGE: Ready to Answer It? -->
-        <div data-role="page" id="ready-to-answer-it">
+        <div data-role="page" id="ready-to-answer-it-page">
             <div data-role="header" data-position="fixed">
                 <h3>
                     Header
@@ -85,10 +85,10 @@
                 </div>
                 <div class="ui-grid-a">
                     <div class="ui-block-a">
-                        <input type="button" data-icon="check" value="Sure" id="sure"/>
+                        <input type="button" data-icon="check" value="Sure" id="surebtn"/>
                     </div>
                     <div class="ui-block-b">
-                        <input type="button" data-icon="delete" value="Not now" id="notnow"/>
+                        <input type="button" data-icon="delete" value="Not now" id="notnowbtn"/>
                     </div>
                 </div>
             </div>
@@ -97,133 +97,60 @@
                 <h3>Footer</h3>
             </div>    
         </div> 
-        <!-- END PAGE: Select Buy or Sell -->
-        
-        
-        <!--
-        =================
-        BUYER PAGES BELOW
-        =================
-        -->
+        <script type="text/javascript">
+        $(document).on('pageinit', '#ready-to-answer-it-page', function(){      
+            //alert('pageinit on ready-to-answer-it-page');
 
+            $(document).on('click', '#surebtn', function(){ 
 
-        <!-- BEGIN PAGE: Address search criteria -->
-        <div data-role="page" id="address-search-criteria-page">
-            <div data-role="header" data-position="fixed">
-                <h3>
-			Buy or Sell
-                </h3>
-            </div>   
+                var url = 'http://winskee.com/phonegap/answerit/get-active-questions.php'; 
 
-            <div role="main" class="ui-content get-my-location">
-                I am coming from:
-                <br/>
-                (choose one)
-                <p></p>
-                <div class="ui-grid-solo">
-                    <div class="ui-block-a">
-                        <input type="text" id="postalcode" name="postalcode" placeholder="Enter your Postal Code"/>
-                    </div>
-                    <div class="ui-block-a">
-                        <input type="text" id="postalcode" name="postalcode" placeholder="Enter the nearest intersection you are at"/>
-                    </div>
-                    <div class="ui-block-a">
-                        <input type="button" data-icon="location" value="Use my location" id="usemylocation"/>
-                    </div>
-                </div>
-                <p></p>
-                <p></p>
-                Show me the garage sales
-                <p></p>
-                <div class="ui-grid-solo">
-                    <div class="ui-block-a">
-                        <input type="text" id="withinrange" name="withinrange" placeholder="Within how many kilometers"/>
-                    </div>
-                    <div class="ui-block-a">
-                        <p></p>
-                        <p></p>
-                        <input type="button" data-icon="search" value="Search" id="searchaddress"/>
-                    </div>
-                </div>
+                $.ajax({
+                    url: url,
+                    async: true,
+                    beforeSend: function() {
+                        // This callback function will trigger before data is sent
+                        $.mobile.loading('show', {theme:"a", text:"Please wait...", textonly:false, textVisible: false}); // show AJAX spinner
+                    },
+                    complete: function() {
+                        // This callback function will trigger on data sent/received complete
+                        $.mobile.loading('hide'); // hide AJAX spinner
+                    },  
+                    success: function (result) {
+                        //alert('ajax call successful. result='+ result);
+                        ajax.parseJSONP(result);
+                    },
+                    error: function (request,error) {
+                        alert("Can't seem to reach our servers.  Is your internet connection OK?  Please try again!");
+                    }
+                });          
+            });        
+        });
+        var questionInfo = {
+            id : null,
+            result : null
+        }
+        var ajax = {  
+            parseJSONP:function(result) { 
+                questionInfo.result = result;
 
-            </div>
+                // show the results page
+                $(':mobile-pagecontainer').pagecontainer('change', '#address-search-results-page', {
+                    reload: false
+                });
 
-            <div data-role="footer" data-position="fixed" data-tap-toggle="false">
-                <h3>Footer</h3>
-            </div>    
-        </div> 
-	<script type="text/javascript">
-		$(document).on('pageinit', '#address-search-criteria-page', function(){      
-                    //alert('pageinit on address-search-criteria-page');
-
-			$(document).on('click', '#usemylocation', function(){
-
-				if (navigator.geolocation) {
-					function success(pos) {
-						// Location found
-						alert((new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude)));
-					}
-					function fail(error) {
-						alert("Cannot determine your location.");
-					}
-					// Find the users current position.  Cache the location for 5 minutes, timeout after 6 seconds
-					navigator.geolocation.getCurrentPosition(success, fail, {maximumAge: 500000, enableHighAccuracy:true, timeout: 6000});
-				}
-			});
-
-			$(document).on('click', '#searchaddress', function(){ 
-
-			    var url = 'http://api.themoviedb.org/3/',
-				mode = 'search/movie?query=',
-				movieName = '&query=the',
-				key = '&api_key=470fd2ec8853e25d2f8d86f685d2270e'; 
-
-			    $.ajax({
-				url: url + mode + key + movieName ,
-				dataType: "jsonp",
-				async: true,
-				beforeSend: function() {
-				    // This callback function will trigger before data is sent
-				    $.mobile.loading('show', {theme:"a", text:"Please wait...", textonly:false, textVisible: false}); // show AJAX spinner
-				},
-				complete: function() {
-				    // This callback function will trigger on data sent/received complete
-				    $.mobile.loading('hide'); // hide AJAX spinner
-				},  
-				success: function (result) {
-				    //alert('ajax call successful');
-				    ajax.parseJSONP(result);
-				},
-				error: function (request,error) {
-				    alert('Network error has occurred please try again!');
-				}
-			    });          
-			});        
-		});
-		var movieInfo = {
-			id : null,
-			result : null
-		}
-		var ajax = {  
-			parseJSONP:function(result) {  
-				movieInfo.result = result.results;
-
-				// show the results page
-				$(':mobile-pagecontainer').pagecontainer('change', '#address-search-results-page', {
-				reload: false
-				});
-
-			}
-		}
+            }
+        }
         </script>
-        <!-- END PAGE: Address search criteria -->
-
+        <!-- END PAGE: Ready to Answer It? -->
+        
+        
         
         <!-- BEGIN PAGE: Address search results -->
         <div data-role="page" id="address-search-results-page">
             <div data-role="header" data-position="fixed">
                 <h3>
-                    Address search results
+                    Active Questions
                 </h3>
                 <a href="#address-search-results-map-page" data-icon="navigation" class="ui-btn-right">View in map</a>
             </div>   
@@ -244,9 +171,9 @@
                 //alert('pageinit on address-search-results-page');
                 // populate search results
                 $('#address-list').empty();        
-                $.each(movieInfo.result, function(i, row) {
+                $.each(questionInfo.result, function(i, row) {
                     console.log(JSON.stringify(row));
-                    $('#address-list').append('<li><a href="" data-id="' + row.id + '"><img src="http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w185'+row.poster_path+'"/><h3>' + row.title + '</h3><p>' + row.vote_average + '/10</p></a></li>');
+                    $('#address-list').append('<li><a href="" data-id="' + row.id + '"><img src="'+row.picture_url+'"/><h3>' + row.text + '</h3><p>Answers received: ' + row.answered_count + '</p><p>Question expires: ' + row.expiry_date + '</p></a></li>');
                 });
                 $('#address-list').listview('refresh');
                 $(".listview-wrapper").iscrollview("refresh");

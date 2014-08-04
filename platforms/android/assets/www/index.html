@@ -19,8 +19,23 @@
                 src: url("font/reboto/Roboto-Regular.ttf"); 
             }
 
+            div .mainlogocontentdiv {
+                /*center the div*/
+                width: 100%;
+                margin: 0px auto 0px auto;
+            }
+            div .mainlogocontentdiv h1 {
+                font-weight: bolder;
+            }
+            div .mainlogodiv {
+                width: 100%;
+                text-align: center;
+                padding-top: 10px;
+                padding-bottom: 10px;
+            }
+            
             .ui-content {
-                padding: 14px !important;
+                padding: 0px !important;
             }
 
             .ui-listview {
@@ -63,9 +78,11 @@
                 </h3>
             </div>   
 
-            <div role="main" class="ui-content" style="text-align:center;">
+            <div role="main" class="ui-content mainlogocontentdiv">
                 <h1>Ready to Answer It?</h1>
-                <img id="mainlogo" src="img/answerit1.jpg" />
+                <div class="mainlogodiv">
+                    <img src="img/answerit1.jpg" />
+                </div>
                 <div class="ui-grid-a">
                     <div class="ui-block-a">
                         <input type="button" data-icon="check" value="Sure" id="sure"/>

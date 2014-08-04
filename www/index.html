@@ -7,13 +7,33 @@
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
 
         <meta name="msapplication-tap-highlight" content="no" />
-        <title>Garage Sale Genius</title>
+        <title>Answer It</title>
 
         <link rel="stylesheet" type="text/css" href="css/gsgenius.css" />
         <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.3.min.css" /> 
         <link rel="stylesheet" type="text/css" href="css/jquery.mobile.iscrollview.css" />
         <link rel="stylesheet" type="text/css" href="css/jquery.mobile.iscrollview-pull.css" />
         <style>
+            @font-face {
+                font-family:'Roboto-Regular';
+                src: url("font/reboto/Roboto-Regular.ttf"); 
+            }
+
+            div .mainlogocontentdiv {
+                /*center the div*/
+                width: 50%;
+                margin: 0px auto 0px auto;
+            }
+            div .mainlogocontentdiv h1 {
+                font-weight: bolder;
+            }
+            div .mainlogodiv {
+                width: 100%;
+                text-align: center;
+                padding-top: 10px;
+                padding-bottom: 10px;
+            }
+            
             .ui-content {
                 padding: 14px !important;
             }
@@ -50,25 +70,25 @@
         =================
         -->        
                 
-        <!-- BEGIN PAGE: Select Buy or Sell -->
-        <div data-role="page" id="select-buy-or-sell-page">
+        <!-- BEGIN PAGE: Ready to Answer It? -->
+        <div data-role="page" id="ready-to-answer-it">
             <div data-role="header" data-position="fixed">
                 <h3>
-			Buy or Sell
+                    Header
                 </h3>
             </div>   
 
-            <div role="main" class="ui-content">
+            <div role="main" class="ui-content mainlogocontentdiv">
+                <h1>Ready to Answer It?</h1>
+                <div class="mainlogodiv">
+                    <img src="img/answerit1.jpg" />
+                </div>
                 <div class="ui-grid-a">
                     <div class="ui-block-a">
-                        <a href="#address-search-criteria-page" data-transition="slide"  class="ui-btn" data-inline="false">
-                            <img src="img/buy1.png" alt="buy" width="200px" height="200px" />
-                        </a>
+                        <input type="button" data-icon="check" value="Sure" id="sure"/>
                     </div>
                     <div class="ui-block-b">
-                        <a href="#enter-seller-item-details-page" data-transition="slide"  class="ui-btn" data-inline="false">
-                            <img src="img/buy1.png" alt="sell" width="200px" height="200px" />
-                        </a>
+                        <input type="button" data-icon="delete" value="Not now" id="notnow"/>
                     </div>
                 </div>
             </div>

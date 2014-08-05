@@ -33,7 +33,6 @@
                 padding-top: 10px;
                 padding-bottom: 10px;
             }
-            
             .ui-content {
                 padding: 0px !important;
             }
@@ -44,6 +43,12 @@
 
             .listview-wrapper {
                 width: 100% !important;
+            }
+            .thumbnail{
+                padding: 10px;
+                max-width: 80px !important;
+                width: 80px !important;
+                height: 100%;
             }
         </style>
         <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
@@ -135,7 +140,7 @@
                 questionInfo.result = result;
 
                 // show the results page
-                $(':mobile-pagecontainer').pagecontainer('change', '#address-search-results-page', {
+                $(':mobile-pagecontainer').pagecontainer('change', '#active-questions-page', {
                     reload: false
                 });
 
@@ -146,8 +151,8 @@
         
         
         
-        <!-- BEGIN PAGE: Address search results -->
-        <div data-role="page" id="address-search-results-page">
+        <!-- BEGIN PAGE: Active questions -->
+        <div data-role="page" id="active-questions-page">
             <div data-role="header" data-position="fixed">
                 <h3>
                     Active Questions
@@ -157,7 +162,7 @@
 
             <div role="main" class="ui-content">
                 <div class="listview-wrapper" data-iscroll>
-                    <ul data-role="listview" id="address-list" data-inset="true" data-icon="false">
+                    <ul data-role="listview" id="questions-list" data-inset="true">
                     </ul>
                 </div>
             </div>
@@ -167,19 +172,19 @@
             </div>    
         </div> 
         <script type="text/javascript">
-            $(document).on('pageinit', '#address-search-results-page', function(){
-                //alert('pageinit on address-search-results-page');
-                // populate search results
-                $('#address-list').empty();        
+            $(document).on('pageinit', '#active-questions-page', function(){
+                //alert('pageinit on active-questions-page');
+                // populate questions
+                $('#questions-list').empty();        
                 $.each(questionInfo.result, function(i, row) {
                     console.log(JSON.stringify(row));
-                    $('#address-list').append('<li><a href="" data-id="' + row.id + '"><img src="'+row.picture_url+'"/><h3>' + row.text + '</h3><p>Answers received: ' + row.answered_count + '</p><p>Question expires: ' + row.expiry_date + '</p></a></li>');
+                    $('#questions-list').append('<li><a href="" data-id="' + row.id + '"><img class="thumbnail" src="'+row.picture_url+'"/><h3>' + row.text + '</h3><p>Answers received: ' + row.answered_count + '</p><p>Question expires: ' + row.expiry_date + '</p></a></li>');
                 });
-                $('#address-list').listview('refresh');
+                $('#questions-list').listview('refresh');
                 $(".listview-wrapper").iscrollview("refresh");
 
                 // click on a search item result
-                $(document).on('vclick', '#address-list li a', function(){  
+                $(document).on('vclick', '#questions-list li a', function(){  
                     movieInfo.id = $(this).attr('data-id');
                     $(':mobile-pagecontainer').pagecontainer('change', '#view-seller-item-details-page', {
                         reload: false
@@ -187,7 +192,7 @@
                 });
             });
         </script>
-        <!-- END PAGE: Address search results -->
+        <!-- END PAGE: Active questions -->
 
 
         <!-- BEGIN PAGE: Address search results in map -->
